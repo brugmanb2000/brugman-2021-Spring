@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="imageViewerButton" type="id"></item>
+    <item name="randomNumberButton" type="id"></item>
+    <item name="textView" type="id"></item>
+    <item name="divider" type="id"></item>
+</resources>
