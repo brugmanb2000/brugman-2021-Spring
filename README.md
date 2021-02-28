@@ -1,8 +1,10 @@
 # Brugman-2021-Spring
-
-## HW 1.1 (or as the folder says, HW11)
-
 ### By Brandon Brugman
+
+
+# HW 1.1 (or as the folder says, HW11)
+
+
 
 
 ## HW Requirements: 
@@ -25,3 +27,9 @@
 My Android Emulator used a Galaxy Nexus 30 and Nexus One. 
 
 Primarily used Galaxy Nexus 30 and is formatted to fit that one best. Still learning the formatting part, but Nexus One still works but is a little uglier. 
+
+# HW2 
+
+## App Ideas
+
+Not much to add here other than I have my wireframes and everything in one PDF file =)
