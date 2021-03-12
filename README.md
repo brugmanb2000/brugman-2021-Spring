@@ -30,7 +30,7 @@ Primarily used Galaxy Nexus 30 and is formatted to fit that one best. Still lear
 
 # HW2 
 
-## App Ideas
+### App Ideas
 
 Not much to add here other than I have my wireframes and everything in one PDF file =)
 
