@@ -33,3 +33,7 @@ Primarily used Galaxy Nexus 30 and is formatted to fit that one best. Still lear
 ## App Ideas
 
 Not much to add here other than I have my wireframes and everything in one PDF file =)
+
+# Unanimous
+
+## This is my Project 1 and beginning of my final app idea. README is inside the folder. 
