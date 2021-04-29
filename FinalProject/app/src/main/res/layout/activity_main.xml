@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/main_frag_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,24 +20,18 @@
         android:background="#F4A3A3"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="40dp">
 
         <Button
-            android:id="@+id/button_movies"
+            android:id="@+id/itemsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Movies" />
 
         <Space
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="20dp"
             android:layout_weight="1"></Space>
-
-        <Button
-            android:id="@+id/button_camera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Camera" />
 
         <Space
             android:layout_width="0dp"
@@ -38,10 +39,10 @@
             android:layout_weight="1"></Space>
 
         <Button
-            android:id="@+id/button_settings"
+            android:id="@+id/rules_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings" />
+            android:text="Rules" />
 
     </LinearLayout>
 

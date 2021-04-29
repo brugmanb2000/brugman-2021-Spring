@@ -15,13 +15,13 @@ interface APIService {
     @GET ("database.php")
     fun testPIN(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
-    @POST("database.php")
+    @GET("database.php")
     fun addPIN(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
-    @POST("database.php")
+    @GET("database.php")
     fun removePIN(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
-    @POST("database.php")
+    @GET("database.php")
     fun addNickname(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     @GET("database.php")
@@ -30,16 +30,16 @@ interface APIService {
     @GET("database.php")
     fun getNicknames(@QueryMap params: HashMap<String?, String?>): Call<NicknameReturn>
 
-    @POST("database.php")
+    @GET("database.php")
     fun addItem(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
-    @POST("database.php")
+    @GET("database.php")
     fun removeItem(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     @GET("database.php")
     fun getItems(@QueryMap params: HashMap<String?, String?>): Call<VoteItems>
 
-    @POST("database.php")
+    @GET("database.php")
     fun addVotes(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     @GET("database.php")

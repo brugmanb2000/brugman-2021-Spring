@@ -12,9 +12,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragHost
 import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragJoin
-import com.example.project2.ItemActivity.Fragments.LobbyFrag
+import com.example.project2.ItemActivity.Fragments.LobbyFragHost
+import com.example.project2.ItemActivity.Fragments.LobbyFragPlayer
 import com.example.project2.ItemActivity.RetrofitApi.APIService
 import com.example.project2.ItemActivity.ViewModels.ItemViewModel
+import com.example.project2.JSONReturnObjects.NicknameReturn
 import com.example.project2.JSONReturnObjects.ReturnStatusJSON
 import com.example.project2.R
 import retrofit2.Call
@@ -53,7 +55,7 @@ class ItemActivity() : AppCompatActivity() {
             viewModel.changePlayerStatusHost()
             viewModel.addPIN(-1)
             viewModel.addNickname("")
-            createButton.text = "Start Session"
+            createButton.text = "Create Session"
             fragMan = supportFragmentManager.beginTransaction()
             fragMan.replace(R.id.fragLayout, ItemActivityConnectionFragHost.newInstance())
             fragMan.addToBackStack(null)
@@ -74,7 +76,11 @@ class ItemActivity() : AppCompatActivity() {
                         ItemViewModel.PlayerStatusEnum.host -> {
                             val editText: TextView = findViewById(R.id.sessionPINEditText2)
                             if (viewModel.getPIN() == -1) {
-                                Toast.makeText(applicationContext, "Enter a valid PIN", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Enter a valid PIN",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
 
@@ -83,20 +89,36 @@ class ItemActivity() : AppCompatActivity() {
                             if (editText.text.toString().toIntOrNull() != null) {
                                 viewModel.addPIN(editText.text.toString().toInt())
                             } else {
-                                Toast.makeText(applicationContext, "Enter a valid PIN", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Enter a valid PIN",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
 
                     if (viewModel.nickname == "" || viewModel.nickname == "enter nickname") {
-                        Toast.makeText(applicationContext, "Enter a nickname for yourself =)", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Enter a nickname for yourself =)",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         checkPinAvailability(viewModel.getPIN(), viewModel.nickname)
                     }
 
                 }
                 viewModel.getGamestate() == ItemViewModel.GameState.lobby -> {
+                    when (viewModel.playerStatus) {
+                        ItemViewModel.PlayerStatusEnum.host -> {
 
+                        }
+
+                        ItemViewModel.PlayerStatusEnum.player -> {
+
+                        }
+                    }
                 }
                 viewModel.getGamestate() == ItemViewModel.GameState.vote -> {
 
@@ -113,8 +135,11 @@ class ItemActivity() : AppCompatActivity() {
 
     fun checkPinAvailability(gamePIN: Int, nickname: String) {
         val viewModel: ItemViewModel by viewModels()
+        val createButton = findViewById<Button>(R.id.sessionCreateJoin)
         val joinButton = findViewById<Button>(R.id.joinButton)
         val hostButton = findViewById<Button>(R.id.hostButton)
+        val nicknameField = findViewById<EditText>(R.id.nicknameField)
+
         if (viewModel.getPIN() == -1) {
             Toast.makeText(applicationContext, "Make sure to add a PIN!", Toast.LENGTH_SHORT)
             return
@@ -133,9 +158,8 @@ class ItemActivity() : AppCompatActivity() {
                             response: Response<ReturnStatusJSON>
                         ) {
                             val json = response.body()
-                            val body = response.body()?.get(0)?.ReturnStatus
 
-                            when (body) {
+                            when (response.body()?.get(0)?.ReturnStatus) {
                                 "true" -> {
                                     Toast.makeText(
                                         applicationContext,
@@ -147,14 +171,17 @@ class ItemActivity() : AppCompatActivity() {
                                         "ViewModelPlayerStatus",
                                         viewModel.playerStatus.toString()
                                     )
-                                    addGameSession(gamePIN.toString(), nickname)
+                                    addGameSession(gamePIN.toString(), nickname, "host")
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
                                     val fragMan = supportFragmentManager.beginTransaction()
-                                    fragMan.replace(R.id.fragLayout, LobbyFrag.newInstance())
+                                    fragMan.replace(R.id.fragLayout, LobbyFragHost.newInstance())
                                     fragMan.addToBackStack(null)
                                     fragMan.commit()
                                     joinButton.visibility = View.INVISIBLE
                                     hostButton.visibility = View.INVISIBLE
+                                    createButton.text = "Start Session";
+                                    nicknameField.visibility = View.INVISIBLE
+
 
                                 }
                                 "false" -> {
@@ -216,6 +243,7 @@ class ItemActivity() : AppCompatActivity() {
                                         "PIN found. Joining session",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    createButton.visibility = View.INVISIBLE
                                     Log.e("ViewModelPin", viewModel.getPIN().toString())
                                     Log.e(
                                         "ViewModelPlayerStatus",
@@ -223,11 +251,14 @@ class ItemActivity() : AppCompatActivity() {
                                     )
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
                                     val fragMan = supportFragmentManager.beginTransaction()
-                                    fragMan.replace(R.id.fragLayout, LobbyFrag.newInstance())
+                                    fragMan.replace(R.id.fragLayout, LobbyFragPlayer.newInstance())
                                     fragMan.addToBackStack(null)
                                     fragMan.commit()
+                                    addNickname(gamePIN.toString(), nickname, "player")
                                     joinButton.visibility = View.INVISIBLE
                                     hostButton.visibility = View.INVISIBLE
+                                    nicknameField.visibility = View.INVISIBLE
+
                                 }
                                 else -> {
                                     Toast.makeText(
@@ -254,74 +285,142 @@ class ItemActivity() : AppCompatActivity() {
         }
     }
 
-  fun addGameSession(gamePIN: String, nickname: String) {
+    fun addGameSession(gamePIN: String, nickname: String, userType: String) {
 
-            try {
-                val params: HashMap<String?, String?> = HashMap()
-                params["gamePIN"] = gamePIN
-                params["request"] = "addPin"
-                params["nickname"] = nickname
+        try {
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = gamePIN
+            params["request"] = "addPin"
+            params["nickname"] = nickname
 
-                val api = APIService.create().addPIN(params)
 
-                api?.enqueue(
-                    object : Callback<ReturnStatusJSON> {
-                          override fun onResponse(
-                              call: Call<ReturnStatusJSON>,
-                              response: Response<ReturnStatusJSON>
-                          ) {
-                            Toast.makeText(applicationContext, "Good TEST", Toast.LENGTH_SHORT)
-                        }
+            val api = APIService.create().addPIN(params)
 
-                        override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
-                            Toast.makeText(applicationContext, "BAD TEST", Toast.LENGTH_SHORT)
-
-                            Log.e("Game Session creation:", "Failed/LocalMessage: " + t.localizedMessage)
-                            Log.e("Game Session creation:", "Failed/Call: $call")
-                        }
+            api?.enqueue(
+                object : Callback<ReturnStatusJSON> {
+                    override fun onResponse(
+                        call: Call<ReturnStatusJSON>,
+                        response: Response<ReturnStatusJSON>
+                    ) {
+                        Log.e("Adding Game Session:", "Connected and added.")
+                        addNickname(gamePIN, nickname, userType)
                     }
-                )
 
-                Log.e("Adding Game Session:", "Connected.")
-            } catch (e: Exception) {
-                Log.e("Adding Game Session:", "Failed: " + e.localizedMessage)
+                    override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
+                        Toast.makeText(applicationContext, "BAD TEST", Toast.LENGTH_SHORT)
 
-            }
-        }
-
-
-        fun removeGameSession(gamePIN: String) {
-            try {
-
-
-                Log.e("Removing Game Session:", "Removed.")
-            } catch (e: Exception) {
-                Log.e("Removing Game Session:", "Removal Failed: " + e.localizedMessage)
-            }
-        }
-
-        fun addItem(item: String) {
-            try {
+                        Log.e(
+                            "Game Session creation:",
+                            "Failed/LocalMessage: " + t.localizedMessage
+                        )
+                        Log.e("Game Session creation:", "Failed/Call: $call")
+                    }
+                }
+            )
 
 
-                Log.e("Adding Item", "Added.")
-            } catch (e: Exception) {
-                Log.e("Adding Item", "Addition Failed: " + e.localizedMessage)
-            }
-
-        }
-
-        fun removeItem(item: String) {
-            try {
-
-
-                Log.e("Removing Item", "Removed.")
-            } catch (e: Exception) {
-                Log.e("Removing Item:", "Removal Failed: " + e.localizedMessage)
-            }
-        }
-
-        fun addNickname(gamePIN: String, nickname: String) {
+        } catch (e: Exception) {
+            Log.e("Adding Game Session:", "Failed: " + e.localizedMessage)
 
         }
     }
+
+
+    fun removeGameSession(gamePIN: String) {
+        try {
+
+
+            Log.e("Removing Game Session:", "Removed.")
+        } catch (e: Exception) {
+            Log.e("Removing Game Session:", "Removal Failed: " + e.localizedMessage)
+        }
+    }
+
+    fun addItem(item: String) {
+        try {
+
+
+            Log.e("Adding Item", "Added.")
+        } catch (e: Exception) {
+            Log.e("Adding Item", "Addition Failed: " + e.localizedMessage)
+        }
+
+    }
+
+    fun removeItem(item: String) {
+        try {
+
+
+            Log.e("Removing Item", "Removed.")
+        } catch (e: Exception) {
+            Log.e("Removing Item:", "Removal Failed: " + e.localizedMessage)
+        }
+    }
+
+    fun addNickname(gamePIN: String, nickname: String, userType: String) {
+        try {
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = gamePIN
+            params["request"] = "addNickname"
+            params["nickname"] = nickname
+            params["userType"] = userType
+
+            val api = APIService.create().addNickname(params)
+
+            api?.enqueue(
+                object : Callback<ReturnStatusJSON> {
+                    override fun onResponse(
+                        call: Call<ReturnStatusJSON>,
+                        response: Response<ReturnStatusJSON>
+                    ) {
+                        Log.e("Nickname Added", response.body()?.get(0)?.ReturnStatus.toString())
+                    }
+
+                    override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
+                        Toast.makeText(applicationContext, "BAD TEST", Toast.LENGTH_SHORT)
+
+                        Log.e("Nickname Failed to add", t.localizedMessage)
+                    }
+                }
+            )
+
+
+        } catch (e: Exception) {
+            Log.e("Adding nickname ", "Failed: " + e.localizedMessage)
+
+        }
+    }
+
+    fun getNicknames(gamePIN: String) {
+        try {
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = gamePIN
+            params["request"] = "getNicknames"
+
+            val api = APIService.create().getNicknames(params)
+
+            api?.enqueue(
+                object : Callback<NicknameReturn> {
+                    override fun onResponse(
+                        call: Call<NicknameReturn>,
+                        response: Response<NicknameReturn>
+                    ) {
+                        Log.e("Nickname Added", response.body().toString())
+                    }
+
+                    override fun onFailure(call: Call<NicknameReturn>, t: Throwable) {
+                        Toast.makeText(applicationContext, "BAD TEST", Toast.LENGTH_SHORT)
+
+                        Log.e("Nickname Failed to add", t.localizedMessage)
+                    }
+                }
+            )
+
+
+        } catch (e: Exception) {
+            Log.e("Adding nickname ", "Failed: " + e.localizedMessage)
+
+        }
+    }
+
+}

@@ -12,19 +12,23 @@ import com.example.project2.ItemActivity.ViewModels.ItemViewModel
 import com.example.project2.R
 
 
-class LobbyFrag : Fragment() {
+class LobbyFragPlayer : Fragment() {
 
     companion object {
-        fun newInstance(): LobbyFrag {
-            return LobbyFrag()
+        fun newInstance(): LobbyFragPlayer {
+            return LobbyFragPlayer()
         }
     }
 
     private val viewModel: ItemViewModel by activityViewModels()
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+
         return inflater.inflate(R.layout.fragment_lobby, container, false)
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -32,11 +36,19 @@ class LobbyFrag : Fragment() {
         Log.e("Lobby Fragment:", " Loaded")
         viewModel.changeGamestate(ItemViewModel.GameState.lobby)
 
-        // Update nickname list
-        view?.findViewById<Button>(R.id.lobbyRefresh)?.setOnClickListener {
 
-        }
+
+        when (viewModel.playerStatus) {
+            ItemViewModel.PlayerStatusEnum.host -> {
 
             }
 
-}
+            ItemViewModel.PlayerStatusEnum.player -> {
+
+            }
+
+            }
+        }
+    }
+
+

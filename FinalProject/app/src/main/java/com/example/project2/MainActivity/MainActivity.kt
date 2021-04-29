@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragJoin
+import com.example.project2.ItemActivity.Fragments.RulesFragment
 import com.example.project2.ItemActivity.ItemActivity
 import com.example.project2.R
 
@@ -11,23 +13,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val moviesButton = findViewById<Button>(R.id.button_movies)
-        val cameraButton = findViewById<Button>(R.id.button_camera)
-        val settingsButton = findViewById<Button>(R.id.button_settings)
+        val itemsButton = findViewById<Button>(R.id.itemsButton)
+        val rulesButton = findViewById<Button>(R.id.rules_button)
 
-        settingsButton.setOnClickListener {
+        itemsButton.setOnClickListener {
             val intent = Intent(this, ItemActivity::class.java)
             startActivity(intent)
         }
 
-        moviesButton.setOnClickListener {
-            val intent = Intent(this, ItemActivity::class.java)
-            startActivity(intent)
-        }
-
-        cameraButton.setOnClickListener {
-            val intent = Intent(this, ItemActivity::class.java)
-            startActivity(intent)
+        rulesButton.setOnClickListener {
+            var fragMan = supportFragmentManager.beginTransaction()
+            fragMan.replace(R.id.main_frag_frame, RulesFragment())
+            fragMan.commit()
         }
 
     }

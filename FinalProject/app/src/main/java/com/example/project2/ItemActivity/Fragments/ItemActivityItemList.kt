@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.example.project2.R
 
 
-class ItemActivityMovieList : Fragment() {
+class ItemActivityItemList : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
