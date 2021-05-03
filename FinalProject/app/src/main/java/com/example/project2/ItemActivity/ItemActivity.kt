@@ -3,13 +3,11 @@ package com.example.project2.ItemActivity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -123,29 +121,7 @@ class ItemActivity() : AppCompatActivity() {
                         ).show()
                     } else {
                         checkPinAvailability(viewModel.getPIN(), viewModel.nickname)
-                        if (viewModel.playerStatus == ItemViewModel.PlayerStatusEnum.player) {
-                            val fragMan1 = supportFragmentManager.beginTransaction()
-                            fragMan1.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
-                            fragMan1.addToBackStack(null)
-                            fragMan1.commit()
-                            joinButton.visibility = View.INVISIBLE
-                            hostButton.visibility = View.INVISIBLE
-                            nicknameField.visibility = View.INVISIBLE
-                            createButton.text = "Done Adding Items"
-                            viewModel.changeGamestate(ItemViewModel.GameState.add)
 
-
-                        } else {
-                            val fragMan2 = supportFragmentManager.beginTransaction()
-                            fragMan2.replace(R.id.fragLayout, LobbyFragHost.newInstance())
-                            fragMan2.addToBackStack(null)
-                            fragMan2.commit()
-                            joinButton.visibility = View.INVISIBLE
-                            hostButton.visibility = View.INVISIBLE
-                            createButton.text = "Start Session";
-                            nicknameField.visibility = View.INVISIBLE
-                            viewModel.changeGamestate(ItemViewModel.GameState.lobbyHost)
-                        }
                     }
 
                 }
@@ -218,6 +194,10 @@ class ItemActivity() : AppCompatActivity() {
     fun checkPinAvailability(gamePIN: Int, nickname: String) {
         val viewModel: ItemViewModel by viewModels()
 
+        val joinButton = findViewById<Button>(R.id.joinButton)
+        val hostButton = findViewById<Button>(R.id.hostButton)
+        val createButton = findViewById<Button>(R.id.sessionCreateJoin)
+        val nicknameField = findViewById<EditText>(R.id.nicknameField)
 
         if (viewModel.getPIN() == -1) {
             Toast.makeText(applicationContext, "Make sure to add a PIN!", Toast.LENGTH_SHORT)
@@ -251,7 +231,17 @@ class ItemActivity() : AppCompatActivity() {
                                     )
                                     addGameSession(gamePIN.toString(), nickname, "host")
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
-
+                                    val fragMan2 = supportFragmentManager.beginTransaction()
+                                    fragMan2.replace(R.id.fragLayout, LobbyFragHost.newInstance())
+                                    fragMan2.addToBackStack(null)
+                                    fragMan2.commit()
+                                    joinButton.visibility = View.GONE
+                                    hostButton.visibility = View.GONE
+                                    createButton.text = "Start Session";
+                                    nicknameField.visibility = View.GONE
+                                    viewModel.changeGamestate(ItemViewModel.GameState.lobbyHost)
+                                    findViewById<LinearLayout>(R.id.itemActivityBackground).setBackgroundColor(
+                                        Color.parseColor("#B2E4A9"))
                                 }
 
                                 "false" -> {
@@ -320,7 +310,17 @@ class ItemActivity() : AppCompatActivity() {
                                         viewModel.playerStatus.toString()
                                     )
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
-
+                                    val fragMan1 = supportFragmentManager.beginTransaction()
+                                    fragMan1.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
+                                    fragMan1.addToBackStack(null)
+                                    fragMan1.commit()
+                                    joinButton.visibility = View.GONE
+                                    hostButton.visibility = View.GONE
+                                    nicknameField.visibility = View.GONE
+                                    createButton.text = "Done Adding Items"
+                                    viewModel.changeGamestate(ItemViewModel.GameState.add)
+                                    findViewById<LinearLayout>(R.id.itemActivityBackground).setBackgroundColor(
+                                        Color.parseColor("#B2E4A9"))
 
                                 }
                                 else -> {

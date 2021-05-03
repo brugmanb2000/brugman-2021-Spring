@@ -21,8 +21,12 @@ class ItemViewModel : ViewModel() {
         join_host, lobbyHost, lobby, add, lobby2, vote, results
     }
 
-    var playerStatus = PlayerStatusEnum.player
+    enum class ValidPIN {
+        YES, NO
+    }
 
+    var playerStatus = PlayerStatusEnum.player
+    var validPIN = ValidPIN.NO
     var nickname = ""
     private var gamePIN: Int = -1
     private var gameState = GameState.join_host;

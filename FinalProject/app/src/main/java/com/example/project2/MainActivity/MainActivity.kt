@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragJoin
+import com.example.project2.ItemActivity.Fragments.LogoFrag
 import com.example.project2.ItemActivity.Fragments.RulesFragment
 import com.example.project2.ItemActivity.ItemActivity
 import com.example.project2.R
@@ -24,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val itemsButton = findViewById<Button>(R.id.itemsButton)
         val rulesButton = findViewById<Button>(R.id.rules_button)
+        var switch = 0;
+        val fragMan = supportFragmentManager.beginTransaction()
+        fragMan.replace(R.id.main_frag_frame, LogoFrag())
+        fragMan . commit ()
 
         itemsButton.setOnClickListener {
             val intent = Intent(this, ItemActivity.newInstance()::class.java)
@@ -32,10 +37,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         rulesButton.setOnClickListener {
-            var fragMan = supportFragmentManager.beginTransaction()
-            fragMan.replace(R.id.main_frag_frame, RulesFragment())
-            fragMan.commit()
-        }
 
+            when (switch) {
+                0 -> {
+                    val fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.main_frag_frame, RulesFragment())
+                    fragMan . commit ()
+                    switch = 1
+                }
+
+                1 -> {
+                    val fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.main_frag_frame, LogoFrag())
+                    fragMan . commit ()
+                    switch = 0
+
+                }
+
+
+            }
+        }
     }
 }
