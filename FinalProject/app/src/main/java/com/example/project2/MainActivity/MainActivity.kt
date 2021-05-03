@@ -10,6 +10,15 @@ import com.example.project2.ItemActivity.ItemActivity
 import com.example.project2.R
 
 class MainActivity : AppCompatActivity() {
+
+
+    companion object {
+        fun newInstance(): MainActivity {
+            return MainActivity()
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

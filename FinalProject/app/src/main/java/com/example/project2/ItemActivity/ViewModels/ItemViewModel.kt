@@ -1,8 +1,15 @@
 package com.example.project2.ItemActivity.ViewModels
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import com.example.project2.ItemActivity.RetrofitApi.APIService
+import com.example.project2.JSONReturnObjects.ReturnStatusJSON
 
 import com.example.project2.JSONReturnObjects.VoteItems
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ItemViewModel : ViewModel() {
 
@@ -49,6 +56,32 @@ class ItemViewModel : ViewModel() {
 
     fun changePlayerStatusPlayer() {
         playerStatus = ItemViewModel.PlayerStatusEnum.player
+    }
+
+    fun removePlayer() {
+
+        val params: HashMap<String?, String?> = HashMap()
+        params["gamePIN"] = getPIN().toString()
+        params["request"] = "addNickname"
+        params["nickname"] = nickname
+
+
+        val api = APIService.create().removeNickname(params)
+
+        api.enqueue(
+            object : Callback<Void> {
+                override fun onResponse(
+                    call: Call<Void>,
+                    response: Response<Void>
+                ) {
+                    Log.e("Nickname Removed", nickname.toString())
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                     Log.e("Nickname Removed", t.localizedMessage)
+                }
+            }
+        )
     }
 
 }

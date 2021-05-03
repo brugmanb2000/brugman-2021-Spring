@@ -1,6 +1,7 @@
 package com.example.project2.ItemActivity
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.project2.ItemActivity.Fragments.*
@@ -30,11 +32,21 @@ class ItemActivity() : AppCompatActivity() {
         }
     }
 
+
+    val viewModel: ItemViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item)
+            onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.removePlayer()
+                    val intent = Intent(applicationContext, MainActivity.newInstance()::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            })
 
-        val viewModel: ItemViewModel by viewModels()
+
         val joinButton = findViewById<Button>(R.id.joinButton)
         val hostButton = findViewById<Button>(R.id.hostButton)
         val createButton = findViewById<Button>(R.id.sessionCreateJoin)
@@ -79,7 +91,7 @@ class ItemActivity() : AppCompatActivity() {
                 viewModel.getGamestate() == ItemViewModel.GameState.join_host -> {
                     when (viewModel.playerStatus) {
                         ItemViewModel.PlayerStatusEnum.host -> {
-                            val editText: TextView = findViewById(R.id.sessionPINEditText2)
+
                             if (viewModel.getPIN() == -1) {
                                 Toast.makeText(
                                     applicationContext,
@@ -112,10 +124,10 @@ class ItemActivity() : AppCompatActivity() {
                     } else {
                         checkPinAvailability(viewModel.getPIN(), viewModel.nickname)
                         if (viewModel.playerStatus == ItemViewModel.PlayerStatusEnum.player) {
-                            val fragMan = supportFragmentManager.beginTransaction()
-                            fragMan.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
-                            fragMan.addToBackStack(null)
-                            fragMan.commit()
+                            val fragMan1 = supportFragmentManager.beginTransaction()
+                            fragMan1.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
+                            fragMan1.addToBackStack(null)
+                            fragMan1.commit()
                             joinButton.visibility = View.INVISIBLE
                             hostButton.visibility = View.INVISIBLE
                             nicknameField.visibility = View.INVISIBLE
@@ -124,10 +136,10 @@ class ItemActivity() : AppCompatActivity() {
 
 
                         } else {
-                            val fragMan = supportFragmentManager.beginTransaction()
-                            fragMan.replace(R.id.fragLayout, LobbyFragHost.newInstance())
-                            fragMan.addToBackStack(null)
-                            fragMan.commit()
+                            val fragMan2 = supportFragmentManager.beginTransaction()
+                            fragMan2.replace(R.id.fragLayout, LobbyFragHost.newInstance())
+                            fragMan2.addToBackStack(null)
+                            fragMan2.commit()
                             joinButton.visibility = View.INVISIBLE
                             hostButton.visibility = View.INVISIBLE
                             createButton.text = "Start Session";
@@ -145,6 +157,7 @@ class ItemActivity() : AppCompatActivity() {
                     fragMan.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
                     fragMan.addToBackStack(null)
                     fragMan.commit()
+                    createButton.text = "Done Adding Items"
                     viewModel.changeGamestate(ItemViewModel.GameState.add)
 
                 }
@@ -204,10 +217,7 @@ class ItemActivity() : AppCompatActivity() {
 
     fun checkPinAvailability(gamePIN: Int, nickname: String) {
         val viewModel: ItemViewModel by viewModels()
-        val createButton = findViewById<Button>(R.id.sessionCreateJoin)
-        val joinButton = findViewById<Button>(R.id.joinButton)
-        val hostButton = findViewById<Button>(R.id.hostButton)
-        val nicknameField = findViewById<EditText>(R.id.nicknameField)
+
 
         if (viewModel.getPIN() == -1) {
             Toast.makeText(applicationContext, "Make sure to add a PIN!", Toast.LENGTH_SHORT)
@@ -220,13 +230,12 @@ class ItemActivity() : AppCompatActivity() {
 
         when (viewModel.playerStatus) {
             ItemViewModel.PlayerStatusEnum.host -> {
-                api?.enqueue(
+                api.enqueue(
                     object : Callback<ReturnStatusJSON> {
                         override fun onResponse(
                             call: Call<ReturnStatusJSON>,
                             response: Response<ReturnStatusJSON>
                         ) {
-                            val json = response.body()
 
                             when (response.body()?.get(0)?.ReturnStatus) {
                                 "true" -> {
@@ -282,7 +291,7 @@ class ItemActivity() : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Enter a valid PIN", Toast.LENGTH_SHORT)
                         .show()
                 }
-                api?.enqueue(
+                api.enqueue(
                     object : Callback<ReturnStatusJSON> {
                         override fun onResponse(
                             call: Call<ReturnStatusJSON>,
@@ -350,7 +359,7 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().addPIN(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<ReturnStatusJSON> {
                     override fun onResponse(
                         call: Call<ReturnStatusJSON>,
@@ -391,7 +400,7 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().addNickname(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<ReturnStatusJSON> {
                     override fun onResponse(
                         call: Call<ReturnStatusJSON>,
@@ -423,7 +432,7 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().getNicknames(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<NicknameReturn> {
                     override fun onResponse(
                         call: Call<NicknameReturn>,
@@ -473,7 +482,7 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().getGameState(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<ReturnStatusJSON> {
                     override fun onResponse(
                         call: Call<ReturnStatusJSON>,
@@ -506,7 +515,7 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().clearSession(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<ReturnStatusJSON> {
                     override fun onResponse(
                         call: Call<ReturnStatusJSON>,
@@ -529,13 +538,12 @@ class ItemActivity() : AppCompatActivity() {
 
             val api = APIService.create().getGameState(params)
 
-            api?.enqueue(
+            api.enqueue(
                 object : Callback<ReturnStatusJSON> {
                     override fun onResponse(
                         call: Call<ReturnStatusJSON>,
                         response: Response<ReturnStatusJSON>
                     ) {
-                        val json = response.body()
                         if (response.body()?.get(0)?.ReturnStatus.equals("1")) {
                             Log.e("Updated Game State", "Moving to vote frag")
                             Toast.makeText(applicationContext, "Host has started the game", Toast.LENGTH_SHORT)

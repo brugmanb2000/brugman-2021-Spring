@@ -26,7 +26,7 @@ interface APIService {
     fun addNickname(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     @GET("database.php")
-    fun removeNickname(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
+    fun removeNickname(@QueryMap params: HashMap<String?, String?>): Call<Void>
 
     @GET("database.php")
     fun getNicknames(@QueryMap params: HashMap<String?, String?>): Call<NicknameReturn>

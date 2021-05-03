@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/results_recyclerview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="425dp"
     android:background="#E8F1FA"
     android:orientation="vertical"
     android:padding="10dp"

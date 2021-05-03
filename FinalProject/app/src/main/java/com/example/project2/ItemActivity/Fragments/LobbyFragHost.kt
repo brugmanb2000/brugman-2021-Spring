@@ -1,5 +1,6 @@
 package com.example.project2.ItemActivity.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +36,18 @@ class LobbyFragHost : Fragment() {
     }
 
     private val viewModel: ItemViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.removePlayer()
+                val intent = Intent(activity, ItemActivity.newInstance()::class.java)
+                startActivity(intent)
+                activity!!.finish()
+            }
+        })
+    }
 
 
     override fun onCreateView(
