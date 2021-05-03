@@ -18,7 +18,7 @@ From there, everyone adds items as they want. Typically, the host will define a 
 
 <br>
 Once everyone adds items, the users will vote with a like/dislike button. A user can only like or dislike an item once before it falls off their screen. Once the voting ends, everyone can see the results sorted by most to least amount of votes. 
-
+<br><br>
 ![addItemResults resized](https://user-images.githubusercontent.com/54860312/116919426-7a852d80-ac0e-11eb-9ff3-5e46c079852f.gif)
 
 <br>
