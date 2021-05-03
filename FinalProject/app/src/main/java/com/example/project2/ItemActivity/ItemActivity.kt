@@ -557,4 +557,9 @@ class ItemActivity() : AppCompatActivity() {
 
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        clearSession()
+    }
 }
