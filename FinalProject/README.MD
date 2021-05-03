@@ -3,9 +3,7 @@
 ## By Brandon Brugman
 
 ### Overview
-My app Unanimous is all about finding an answer everyone agrees on. Where do we want to eat? What movie do you want to watch? When with a group, it can be hard to figure out what everyone wants or how split the group is. This is where Unanimous comes into play!
-<br><br><br>
-Unanimous is a quick and easy app to use that everyone get together and find a singular idea that the group wants to do. <br>
+My app Unanimous is all about finding an answer everyone agrees on. Where do we want to eat? What movie do you want to watch? When with a group, it can be hard to figure out what everyone wants or how split the group is. This is where Unanimous comes into play! Unanimous is a quick and easy app to use that everyone get together and find a singular idea that the group wants to do. <br><br><br>
 ![add item GIF resized](https://user-images.githubusercontent.com/54860312/116919220-2ed28400-ac0e-11eb-9c27-c0121ba4625a.gif)
 <br>
 
@@ -20,7 +18,7 @@ From there, everyone adds items as they want. Typically, the host will define a 
 
 <br>
 Once everyone adds items, the users will vote with a like/dislike button. A user can only like or dislike an item once before it falls off their screen. Once the voting ends, everyone can see the results sorted by most to least amount of votes. 
-<br><br><br>
+
 ![addItemResults resized](https://user-images.githubusercontent.com/54860312/116919426-7a852d80-ac0e-11eb-9ff3-5e46c079852f.gif)
 
 <br>
