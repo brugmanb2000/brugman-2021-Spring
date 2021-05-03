@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/results_recyclerview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E8F1FA"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".ItemActivity.Fragments.MovieActivityResults">
+    tools:context=".ItemActivity.Fragments.ItemActivityResults">
 
     <TextView
         android:id="@+id/textView5"
@@ -26,17 +27,19 @@
         android:paddingVertical="5dp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/resultsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
+        android:nestedScrollingEnabled="false"
         android:paddingVertical="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/resultsRefreshButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="End Session" />
+        android:text="Refresh Results" />
 
 </LinearLayout>

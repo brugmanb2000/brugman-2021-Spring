@@ -9,14 +9,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_marginVertical="10dp"
         android:background="#97AFEC"
         android:orientation="vertical"
         android:padding="20dp">
 
 
         <TextView
-            android:id="@+id/nicknameCardText"
+            android:id="@+id/voteItemCardText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -28,7 +28,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/MovieActivityBigCardDislikeButton"
+                android:id="@+id/bigCardDislikeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -40,7 +40,7 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/MovieActivityBigCardLikeButton"
+                android:id="@+id/bigCardLikeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

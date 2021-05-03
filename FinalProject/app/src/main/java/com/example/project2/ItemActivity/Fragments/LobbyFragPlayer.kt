@@ -34,20 +34,7 @@ class LobbyFragPlayer : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.e("Lobby Fragment:", " Loaded")
-        viewModel.changeGamestate(ItemViewModel.GameState.lobby)
 
-
-
-        when (viewModel.playerStatus) {
-            ItemViewModel.PlayerStatusEnum.host -> {
-
-            }
-
-            ItemViewModel.PlayerStatusEnum.player -> {
-
-            }
-
-            }
         }
     }
 

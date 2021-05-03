@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nicknameLinearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="350dp"
     android:background="#B2E4A9"
     android:orientation="vertical"
+    android:textAlignment="viewEnd"
     tools:context=".ItemActivity.Fragments.LobbyFragPlayer">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/nicknames_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="30dp"
+        android:layout_height="250dp"
+        android:padding="15dp"
         android:textAlignment="center" />
-</RelativeLayout>
+
+    <Button
+        android:id="@+id/nicknameRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Refresh" />
+
+    <TextView
+        android:id="@+id/nicknameList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:text="Total Players: 0" />
+
+    <TextView
+        android:id="@+id/nicknamesPIN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gamepin: "
+        android:textAlignment="center" />
+</LinearLayout>

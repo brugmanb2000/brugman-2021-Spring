@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nicknameRecyclerItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#8CE885"
+    android:layout_margin="10dp"
+    android:padding="15dp"
+    android:textAlignment="center"
     app:cardCornerRadius="4dp">
 
     <TextView
-        android:id="@+id/nicknameCardText"
-        android:layout_width="match_parent"
+        android:id="@+id/textViewNicknameCard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#B8F3D3"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 </androidx.cardview.widget.CardView>

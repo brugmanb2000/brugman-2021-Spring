@@ -1,53 +1,97 @@
 package com.example.project2.ItemActivity.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.project2.ItemActivity.CardItems.BigCard
+import com.example.project2.ItemActivity.CardItems.NicknameCard
+import com.example.project2.ItemActivity.ItemActivity
+import com.example.project2.ItemActivity.RecyclerElements.NicknameAdapter
+import com.example.project2.ItemActivity.RecyclerElements.VotingAdapter
+import com.example.project2.ItemActivity.RetrofitApi.APIService
+import com.example.project2.ItemActivity.ViewModels.ItemViewModel
+import com.example.project2.JSONReturnObjects.ItemList
+import com.example.project2.JSONReturnObjects.NicknameReturn
 import com.example.project2.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MovieActivityVoteFrag.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MovieActivityVoteFrag : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_item_activity_vote, container, false)
-    }
+class ItemActivityVoteFrag : Fragment() {
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MovieActivityVoteFrag.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MovieActivityVoteFrag().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        fun newInstance(): ItemActivityVoteFrag {
+            return ItemActivityVoteFrag()
+        }
+    }
+
+    private val viewModel: ItemViewModel by activityViewModels()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_item_activity_vote2, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val loadButton = view?.findViewById<Button>(R.id.voteFragLoadList)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.voteItemsRecyclerView)
+        var list = ArrayList<BigCard>()
+        updateList(list)
+
+        recyclerView?.adapter = VotingAdapter(viewModel.getPIN(), list)
+        recyclerView?.layoutManager = LinearLayoutManager(ItemActivity.newInstance())
+        recyclerView?.setHasFixedSize(true)
+
+
+        loadButton?.setOnClickListener {
+            updateList(list)
+        }
+    }
+
+    private fun updateList(list: ArrayList<BigCard>) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.voteItemsRecyclerView)
+        val params: HashMap<String?, String?> = HashMap<String?, String?>()
+        val loadButton = view?.findViewById<Button>(R.id.voteFragLoadList)
+        params["gamePIN"] = viewModel.getPIN().toString()
+        params["request"] = "getItems"
+        val api = APIService.create().getItems(params)
+        Log.e("Testing List", "Testing...")
+        api?.enqueue(
+            object : Callback<ItemList> {
+                override fun onResponse(
+                    call: Call<ItemList>,
+                    response: Response<ItemList>
+                ) {
+                    val json = response.body()
+                    list.clear()
+                    if (!json.isNullOrEmpty()) {
+                        for (item in json) {
+                            list.add(BigCard(item.item))
+                        }
+                        recyclerView?.adapter = VotingAdapter(viewModel.getPIN(), list)
+                        Log.e("Testing List", "Passed")
+                        loadButton?.visibility = View.INVISIBLE
+                    } else {
+                        Log.e("Testing List,", "Nicknames found null")
+                    }
+
                 }
-            }
+
+                override fun onFailure(call: Call<ItemList>, t: Throwable) {
+                    //Toast.makeText(ItemActivity.newInstance(), "Could not update list", Toast.LENGTH_SHORT).show()
+                    Log.e("Testing List", "Failed")
+                }
+            })
+
     }
 }

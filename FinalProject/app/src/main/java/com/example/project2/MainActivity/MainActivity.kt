@@ -17,8 +17,9 @@ class MainActivity : AppCompatActivity() {
         val rulesButton = findViewById<Button>(R.id.rules_button)
 
         itemsButton.setOnClickListener {
-            val intent = Intent(this, ItemActivity::class.java)
+            val intent = Intent(this, ItemActivity.newInstance()::class.java)
             startActivity(intent)
+            finish()
         }
 
         rulesButton.setOnClickListener {

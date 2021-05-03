@@ -26,7 +26,7 @@
             android:id="@+id/itemsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Movies" />
+            android:text="New Item Game" />
 
         <Space
             android:layout_width="0dp"

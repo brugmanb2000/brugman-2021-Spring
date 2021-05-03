@@ -1,5 +1,6 @@
 package com.example.project2.ItemActivity.RetrofitApi
 
+import com.example.project2.JSONReturnObjects.ItemList
 import com.example.project2.JSONReturnObjects.NicknameReturn
 import com.example.project2.JSONReturnObjects.ReturnStatusJSON
 import com.example.project2.JSONReturnObjects.VoteItems
@@ -37,13 +38,22 @@ interface APIService {
     fun removeItem(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     @GET("database.php")
-    fun getItems(@QueryMap params: HashMap<String?, String?>): Call<VoteItems>
+    fun getItems(@QueryMap params: HashMap<String?, String?>): Call<ItemList>
 
     @GET("database.php")
-    fun addVotes(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
+    fun addVotes(@QueryMap params: HashMap<String?, String?>): Call<Void>
 
     @GET("database.php")
     fun getVotes(@QueryMap params: HashMap<String?, String?>): Call<VoteItems>
+
+    @GET("database.php")
+    fun getGameState(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
+
+    @GET("database.php")
+    fun updateGameState(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
+
+    @GET("database.php")
+    fun clearSession(@QueryMap params: HashMap<String?, String?>): Call<ReturnStatusJSON>
 
     companion object {
 

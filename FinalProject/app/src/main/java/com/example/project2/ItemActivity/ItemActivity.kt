@@ -1,6 +1,7 @@
 package com.example.project2.ItemActivity
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,20 +11,24 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragHost
-import com.example.project2.ItemActivity.Fragments.ItemActivityConnectionFragJoin
-import com.example.project2.ItemActivity.Fragments.LobbyFragHost
-import com.example.project2.ItemActivity.Fragments.LobbyFragPlayer
+import com.example.project2.ItemActivity.Fragments.*
 import com.example.project2.ItemActivity.RetrofitApi.APIService
 import com.example.project2.ItemActivity.ViewModels.ItemViewModel
 import com.example.project2.JSONReturnObjects.NicknameReturn
 import com.example.project2.JSONReturnObjects.ReturnStatusJSON
+import com.example.project2.MainActivity.MainActivity
 import com.example.project2.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ItemActivity() : AppCompatActivity() {
+
+    companion object {
+        fun newInstance(): ItemActivity {
+            return ItemActivity()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,26 +111,90 @@ class ItemActivity() : AppCompatActivity() {
                         ).show()
                     } else {
                         checkPinAvailability(viewModel.getPIN(), viewModel.nickname)
+                        if (viewModel.playerStatus == ItemViewModel.PlayerStatusEnum.player) {
+                            val fragMan = supportFragmentManager.beginTransaction()
+                            fragMan.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
+                            fragMan.addToBackStack(null)
+                            fragMan.commit()
+                            joinButton.visibility = View.INVISIBLE
+                            hostButton.visibility = View.INVISIBLE
+                            nicknameField.visibility = View.INVISIBLE
+                            createButton.text = "Done Adding Items"
+                            viewModel.changeGamestate(ItemViewModel.GameState.add)
+
+
+                        } else {
+                            val fragMan = supportFragmentManager.beginTransaction()
+                            fragMan.replace(R.id.fragLayout, LobbyFragHost.newInstance())
+                            fragMan.addToBackStack(null)
+                            fragMan.commit()
+                            joinButton.visibility = View.INVISIBLE
+                            hostButton.visibility = View.INVISIBLE
+                            createButton.text = "Start Session";
+                            nicknameField.visibility = View.INVISIBLE
+                            viewModel.changeGamestate(ItemViewModel.GameState.lobbyHost)
+                        }
                     }
 
                 }
+
+
+
+                viewModel.getGamestate() == ItemViewModel.GameState.lobbyHost -> {
+                    fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
+                    fragMan.addToBackStack(null)
+                    fragMan.commit()
+                    viewModel.changeGamestate(ItemViewModel.GameState.add)
+
+                }
+
+                viewModel.getGamestate() == ItemViewModel.GameState.add -> {
+                    createButton.text = "Vote on Items"
+                    fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.fragLayout, LobbyFragPlayer.newInstance())
+                    fragMan.addToBackStack(null)
+                    fragMan.commit()
+                    viewModel.changeGamestate(ItemViewModel.GameState.lobby)
+
+                }
+
                 viewModel.getGamestate() == ItemViewModel.GameState.lobby -> {
-                    when (viewModel.playerStatus) {
-                        ItemViewModel.PlayerStatusEnum.host -> {
-
-                        }
-
-                        ItemViewModel.PlayerStatusEnum.player -> {
-
-                        }
+                    createButton.text = "See Results"
+                    fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.fragLayout, ItemActivityVoteFrag.newInstance())
+                    fragMan.addToBackStack(null)
+                    fragMan.commit()
+                    viewModel.changeGamestate(ItemViewModel.GameState.vote)
                     }
-                }
+
                 viewModel.getGamestate() == ItemViewModel.GameState.vote -> {
-
+                    createButton.text = "Vote on Items"
+                    fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.fragLayout, LobbyFragPlayer.newInstance())
+                    fragMan.addToBackStack(null)
+                    fragMan.commit()
+                    viewModel.changeGamestate(ItemViewModel.GameState.lobby2)
                 }
+
+                viewModel.getGamestate() == ItemViewModel.GameState.lobby2 -> {
+                    fragMan = supportFragmentManager.beginTransaction()
+                    fragMan.replace(R.id.fragLayout, ItemActivityResults.newInstance())
+                    fragMan.addToBackStack(null)
+                    fragMan.commit()
+                    viewModel.changeGamestate(ItemViewModel.GameState.results)
+                    createButton.text = "Finish"
+                }
+
                 viewModel.getGamestate() == ItemViewModel.GameState.results -> {
+                    clearSession()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
 
                 }
+
+
             }
         }
 
@@ -173,17 +242,9 @@ class ItemActivity() : AppCompatActivity() {
                                     )
                                     addGameSession(gamePIN.toString(), nickname, "host")
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
-                                    val fragMan = supportFragmentManager.beginTransaction()
-                                    fragMan.replace(R.id.fragLayout, LobbyFragHost.newInstance())
-                                    fragMan.addToBackStack(null)
-                                    fragMan.commit()
-                                    joinButton.visibility = View.INVISIBLE
-                                    hostButton.visibility = View.INVISIBLE
-                                    createButton.text = "Start Session";
-                                    nicknameField.visibility = View.INVISIBLE
-
 
                                 }
+
                                 "false" -> {
                                     Toast.makeText(
                                         applicationContext,
@@ -243,21 +304,14 @@ class ItemActivity() : AppCompatActivity() {
                                         "PIN found. Joining session",
                                         Toast.LENGTH_SHORT
                                     ).show()
-                                    createButton.visibility = View.INVISIBLE
+                                    addNickname(gamePIN.toString(), nickname, "player")
                                     Log.e("ViewModelPin", viewModel.getPIN().toString())
                                     Log.e(
                                         "ViewModelPlayerStatus",
                                         viewModel.playerStatus.toString()
                                     )
                                     Log.e("Next Frag Test", "Testing Lobby Frag")
-                                    val fragMan = supportFragmentManager.beginTransaction()
-                                    fragMan.replace(R.id.fragLayout, LobbyFragPlayer.newInstance())
-                                    fragMan.addToBackStack(null)
-                                    fragMan.commit()
-                                    addNickname(gamePIN.toString(), nickname, "player")
-                                    joinButton.visibility = View.INVISIBLE
-                                    hostButton.visibility = View.INVISIBLE
-                                    nicknameField.visibility = View.INVISIBLE
+
 
                                 }
                                 else -> {
@@ -326,36 +380,6 @@ class ItemActivity() : AppCompatActivity() {
     }
 
 
-    fun removeGameSession(gamePIN: String) {
-        try {
-
-
-            Log.e("Removing Game Session:", "Removed.")
-        } catch (e: Exception) {
-            Log.e("Removing Game Session:", "Removal Failed: " + e.localizedMessage)
-        }
-    }
-
-    fun addItem(item: String) {
-        try {
-
-
-            Log.e("Adding Item", "Added.")
-        } catch (e: Exception) {
-            Log.e("Adding Item", "Addition Failed: " + e.localizedMessage)
-        }
-
-    }
-
-    fun removeItem(item: String) {
-        try {
-
-
-            Log.e("Removing Item", "Removed.")
-        } catch (e: Exception) {
-            Log.e("Removing Item:", "Removal Failed: " + e.localizedMessage)
-        }
-    }
 
     fun addNickname(gamePIN: String, nickname: String, userType: String) {
         try {
@@ -423,4 +447,114 @@ class ItemActivity() : AppCompatActivity() {
         }
     }
 
+
+    fun waitForHost() {
+        val viewModel: ItemViewModel by viewModels()
+        while (viewModel.getGamestate() == ItemViewModel.GameState.lobby) {
+            getGameState()
+            if (viewModel.getGamestate() == ItemViewModel.GameState.vote) {
+                viewModel.changeGamestate(ItemViewModel.GameState.vote)
+                val fragMan = supportFragmentManager.beginTransaction()
+                fragMan.replace(R.id.fragLayout, ItemActivityAddFrag.newInstance())
+                fragMan.addToBackStack(null)
+                fragMan.commit()
+            }
+            Thread.sleep(5000)
+        }
+
+    }
+
+    private fun updateGameSession() {
+        val viewModel: ItemViewModel by viewModels()
+        try {
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = viewModel.getPIN().toString()
+            params["request"] = "updateGameState"
+
+            val api = APIService.create().getGameState(params)
+
+            api?.enqueue(
+                object : Callback<ReturnStatusJSON> {
+                    override fun onResponse(
+                        call: Call<ReturnStatusJSON>,
+                        response: Response<ReturnStatusJSON>
+                    ) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Moving to Vote Session",
+                            Toast.LENGTH_SHORT
+                        )
+                    }
+
+                    override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
+
+                        Log.e("Could not get game state", t.localizedMessage)
+                    }
+                }
+            )
+        } catch (e: Exception) {
+        Log.e("Update game session ", "Failed: " + e.localizedMessage)
+
+    }
+    }
+
+    private fun clearSession() {
+        val viewModel: ItemViewModel by viewModels()
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = viewModel.getPIN().toString()
+            params["request"] = "clearSession"
+
+            val api = APIService.create().clearSession(params)
+
+            api?.enqueue(
+                object : Callback<ReturnStatusJSON> {
+                    override fun onResponse(
+                        call: Call<ReturnStatusJSON>,
+                        response: Response<ReturnStatusJSON>
+                    ) {
+                    }
+
+                    override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
+
+                    }
+                }
+            )}
+
+    private fun getGameState() {
+        val viewModel: ItemViewModel by viewModels()
+        try {
+            val params: HashMap<String?, String?> = HashMap()
+            params["gamePIN"] = viewModel.getPIN().toString()
+            params["request"] = "getGameState"
+
+            val api = APIService.create().getGameState(params)
+
+            api?.enqueue(
+                object : Callback<ReturnStatusJSON> {
+                    override fun onResponse(
+                        call: Call<ReturnStatusJSON>,
+                        response: Response<ReturnStatusJSON>
+                    ) {
+                        val json = response.body()
+                        if (response.body()?.get(0)?.ReturnStatus.equals("1")) {
+                            Log.e("Updated Game State", "Moving to vote frag")
+                            Toast.makeText(applicationContext, "Host has started the game", Toast.LENGTH_SHORT)
+                            viewModel.changeGamestate(ItemViewModel.GameState.vote)
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ReturnStatusJSON>, t: Throwable) {
+
+                        Log.e("Could not get game state", t.localizedMessage)
+                    }
+                }
+            )
+
+
+        } catch (e: Exception) {
+            Log.e("Adding nickname ", "Failed: " + e.localizedMessage)
+
+        }
+    }
 }

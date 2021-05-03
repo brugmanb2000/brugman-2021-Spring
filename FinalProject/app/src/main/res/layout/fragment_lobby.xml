@@ -9,12 +9,12 @@
     tools:context=".ItemActivity.Fragments.LobbyFragPlayer">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewNicknameCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="60dp"
-        android:text="Waiting for host to start game"
+        android:text="Wait for everyone to finish before proceeding =)"
         android:textAlignment="center"
         android:textSize="30sp" />
 </RelativeLayout>
