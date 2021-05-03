@@ -1,10 +1,11 @@
 
+
 #Unanimous
 ## By Brandon Brugman
 
 ### Overview
 My app Unanimous is all about finding an answer everyone agrees on. Where do we want to eat? What movie do you want to watch? When with a group, it can be hard to figure out what everyone wants or how split the group is. This is where Unanimous comes into play! Unanimous is a quick and easy app to use that everyone get together and find a singular idea that the group wants to do. <br><br><br>
-![add item GIF resized](https://user-images.githubusercontent.com/54860312/116919220-2ed28400-ac0e-11eb-9c27-c0121ba4625a.gif)
+![ResultsResized](https://user-images.githubusercontent.com/54860312/116920007-5a09a300-ac0f-11eb-8267-b549bd7d8954.gif)
 <br>
 
 
