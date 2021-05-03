@@ -16,11 +16,14 @@ To use Unanimous, everyone will have the app downloaded. One person will be a ho
 <br><br>
 
 From there, everyone adds items as they want. Typically, the host will define a topic, but the app is specifically free form so brainstorming fun ideas will not be restricted. <br>
-![Add Item](https://user-images.githubusercontent.com/54860312/116916064-106a8980-ac0a-11eb-8fec-33cd8b128aa9.gif)
+![add item GIF resized](https://user-images.githubusercontent.com/54860312/116918924-ca172980-ac0d-11eb-948d-8fe643306e97.gif)
+
+
 <br><br>
 Once everyone adds items, the users will vote with a like/dislike button. A user can only like or dislike an item once before it falls off their screen. Once the voting ends, everyone can see the results sorted by most to least amount of votes. 
 <br>
-![Animation](https://user-images.githubusercontent.com/54860312/116916066-11032000-ac0a-11eb-92d4-be14a3bb86bb.gif)
+![ResultsResized](https://user-images.githubusercontent.com/54860312/116919154-1b271d80-ac0e-11eb-94c6-63cd9ef4144d.gif)
+
 <br><br>
 
 ### Notes for the Teacher
