@@ -17,7 +17,7 @@ From there, everyone adds items as they want. Typically, the host will define a 
 
 
 <br>
-Once everyone adds items, the users will vote with a like/dislike button. A user can only like or dislike an item once before it falls off their screen. Once the voting ends, everyone can see the results sorted by most to least amount of votes. 
+Once everyone adds items, the users will vote with a like/dislike button. A user can only like or dislike an item once before it falls off their screen. Once the voting ends, everyone can see the results sorted by most to least amount of votes. <br><br>
 
 
 
